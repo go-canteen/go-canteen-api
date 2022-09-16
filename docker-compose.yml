@@ -10,7 +10,7 @@ services:
       - "8000:8000"
     environment:
       DEBUG: "true"
-      DATABASE_URL: "postgres://local:local@db:5432/ssapi"
+      DATABASE_URL: "postgres://local:local@db:5432/gocanteendb"
     depends_on:
       - db
   db:
@@ -18,6 +18,6 @@ services:
     environment:
       - POSTGRES_USER=local
       - POSTGRES_PASSWORD=local
-      - POSTGRES_DB=ssapi
+      - POSTGRES_DB=gocanteendb
     ports:
       - "5432:5432"

@@ -23,11 +23,11 @@ from drf_yasg import openapi
 from ping import views as ping_views
 from django.contrib.auth.decorators import login_required
 from django.conf.urls.static import static
-import ssapi.views as ssapi_views
+import main.views as main_views
 
 schema_view = get_schema_view(
     openapi.Info(
-        title="SSAPI",
+        title="Gocanteen API",
         default_version="v1",
     ),
     public=False,
@@ -35,7 +35,7 @@ schema_view = get_schema_view(
 )
 
 router = routers.DefaultRouter()
-router.register(r"users", ssapi_views.UserViewSet)
+router.register(r"users", main_views.UserViewSet)
 
 urlpatterns = [
     url(

@@ -2,7 +2,7 @@
 from django.shortcuts import render
 from django.contrib.auth.models import User
 from rest_framework import viewsets
-from ssapi.serializers import UserSerializer
+from main.serializers import UserSerializer
 from rest_framework import authentication, permissions
 import logging
 
