@@ -1,5 +1,8 @@
-# ss-api
-Silly Simple API
+# Gocanteen API
+
+This is the backend repository for Gocanteen App. The frontend repository can be accessed [here](https://github.com/go-canteen/go-canteen-next.git)
+
+---
 
 This is a [Django Rest Framework](https://www.django-rest-framework.org/) template for deploying an app on https://fly.io
 
