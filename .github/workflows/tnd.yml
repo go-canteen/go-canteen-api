@@ -31,12 +31,3 @@ jobs:
         run: |
           coverage run --parallel --include="./*" --omit="manage.py,go_canteen/*" \
           manage.py test --exclude-tag=functional
-      - name: Show coverage report
-        run: coverage report -m
-      - name: Generate coverage report to HTML
-        run: coverage html
-      - name: Upload test coverage
-        uses: actions/upload-artifact@v2
-        with:
-          name: coverage
-          path: htmlcov/
