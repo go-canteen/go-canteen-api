@@ -13,24 +13,22 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 from pathlib import Path
 import os
 import dj_database_url
-from dotenv import load_dotenv
-
-# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-envpath = os.path.join(BASE_DIR, ".env")
-load_dotenv(dotenv_path=envpath)
-
-ENVIRONMENT = os.getenv("ENVIRONMENT", "DEV")
-DEBUG = os.getenv("DEBUG", False)
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-tx0(q!lqq4qja4z#)608n=%n5yuu!qs8)6rzvza@kx@kilw9gi"
+SECRET_KEY = os.getenv(
+    "SECRET_KEY", "django-insecure-tx0(q!lqq4qja4z#)608n=%n5yuu!qs8)6rzvza@kx@kilw9gi"
+)
 
-ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "*").split()
+PRODUCTION = os.getenv('PRODUCTION') is not None
+DEBUG = os.getenv('DEBUG') is not None
+
+HEROKU_APP_NAME = os.getenv('HEROKU_APP_NAME', '')
+ALLOWED_HOSTS = [f'{HEROKU_APP_NAME}.herokuapp.com', '.localhost', '127.0.0.1', '[::1]']
+
 
 # Application definition
 
@@ -82,24 +80,22 @@ WSGI_APPLICATION = "api.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-USE_POSTGRES = os.getenv('DATABASE_URL') is not None
+USE_POSTGRES = os.getenv("DATABASE_URL") is not None
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+    "default": {
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": BASE_DIR / "db.sqlite3",
     }
 }
 
 if USE_POSTGRES:
-    DATABASES["default"] = dj_database_url.config(conn_max_age=600)
+    DATABASES["default"] = dj_database_url.config(conn_max_age=600, ssl_require=True)
 
 # DRF settings
 REST_FRAMEWORK = {
-    "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.IsAuthenticated",),
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "rest_framework.authentication.TokenAuthentication",
     ),
-    "DEFAULT_RENDERER_CLASSES": ("rest_framework.renderers.JSONRenderer",),
 }
 
 # SWAGGER_SETTINGS
@@ -142,7 +138,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = "en-us"
 
-TIME_ZONE = "UTC"
+TIME_ZONE = "Asia/Jakarta"
 
 USE_I18N = True
 
@@ -161,9 +157,3 @@ STATIC_ROOT = os.path.join(BASE_DIR, "static")
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
-
-# Swagger/Django will serve over http, force https here
-
-if ENVIRONMENT == "PROD":
-    USE_X_FORWARDED_HOST = True
-    SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
