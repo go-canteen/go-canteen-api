@@ -127,3 +127,4 @@ ENV/
 0
 
 db.sqlite3
+staticfiles

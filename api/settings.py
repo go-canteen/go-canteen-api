@@ -23,11 +23,11 @@ SECRET_KEY = os.getenv(
     "SECRET_KEY", "django-insecure-tx0(q!lqq4qja4z#)608n=%n5yuu!qs8)6rzvza@kx@kilw9gi"
 )
 
-PRODUCTION = os.getenv('PRODUCTION') is not None
-DEBUG = os.getenv('DEBUG') is not None
+PRODUCTION = os.getenv("PRODUCTION") is not None
+DEBUG = not PRODUCTION
 
-HEROKU_APP_NAME = os.getenv('HEROKU_APP_NAME', '')
-ALLOWED_HOSTS = [f'{HEROKU_APP_NAME}.herokuapp.com', '.localhost', '127.0.0.1', '[::1]']
+HEROKU_APP_NAME = os.getenv("HEROKU_APP_NAME", "")
+ALLOWED_HOSTS = [f"{HEROKU_APP_NAME}.herokuapp.com", ".localhost", "127.0.0.1", "[::1]"]
 
 
 # Application definition
@@ -61,7 +61,9 @@ ROOT_URLCONF = "api.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": [
+            BASE_DIR / "templates",
+        ],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -73,6 +75,7 @@ TEMPLATES = [
         },
     },
 ]
+
 
 WSGI_APPLICATION = "api.wsgi.application"
 
@@ -148,10 +151,23 @@ USE_TZ = True
 
 
 # Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/3.2/howto/static-files/
+# https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = "/static/"
-STATIC_ROOT = os.path.join(BASE_DIR, "static")
+
+# This is the directory for storing `collectstatic` results.
+# This shouldn't be included in your Git repository.
+STATIC_ROOT = BASE_DIR / "staticfiles"
+
+# You can use this directory to store project-wide static files.
+STATICFILES_DIRS = [
+    BASE_DIR / "static",
+]
+
+# Make sure the directories exist to prevent errors when doing `collectstatic`.
+for directory in [*STATICFILES_DIRS, STATIC_ROOT]:
+    directory.mkdir(exist_ok=True)
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
