@@ -71,7 +71,7 @@ jobs:
           path: htmlcov/
 
   Deployment:
-    if: github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/staging'
     runs-on: ubuntu-latest
     needs: [UnitTest]
     env:
