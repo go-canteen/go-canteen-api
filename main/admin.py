@@ -1,3 +1,4 @@
 from django.contrib import admin
+from main.models import Canteen
 
-# Register your models here.
+admin.site.register(Canteen)
