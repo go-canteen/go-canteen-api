@@ -1,7 +1,8 @@
 from django.test import TestCase, tag
 from django.urls import reverse
 from main.models import Canteen, CanteenBanner
-
+from rest_framework.test import APITestCase
+from rest_framework import status
 
 class MainTestCase(TestCase):
     def test_root_url_status_200(self):
@@ -51,3 +52,19 @@ class CanteenTestCase(TestCase):
 
     def test_canteen_url(self):
         pass
+
+class CanteenAPITest(APITestCase):
+    def test_create_canteen(self):
+        url = reverse('canteens')
+        data = {"name" : "Canteen 1", "address" : "Jl. Canteen 1", "description" : "Canteen 1"}
+        response = self.client.post(url, data, format = "json")
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(Canteen.objects.count(), 1)
+        self.assertEqual(Canteen.objects.get().name, "Canteen 1")
+
+    def test_get_canteen(self):
+        self.canteen = Canteen.objects.create(
+            name="Canteen 1", address="Jl. Canteen 1", description="Canteen 1"
+        )
+        response = self.client.get('/canteens/1')
+        self.assertEqual(response.data.name, "Canteen 1")
