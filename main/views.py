@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from rest_framework import viewsets
 from main.serializers import UserSerializer
 from rest_framework import authentication, permissions
+from rest_framework.views import APIView
 import logging
 
 logger = logging.getLogger(__name__)
@@ -18,3 +19,9 @@ class UserViewSet(viewsets.ModelViewSet):
     permission_classes = (permissions.IsAdminUser,)
     queryset = User.objects.all().order_by("-date_joined")
     serializer_class = UserSerializer
+
+class CanteenList(APIView):
+    pass 
+
+class CanteenDetail(APIView):
+    pass
