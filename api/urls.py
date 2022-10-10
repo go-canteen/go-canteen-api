@@ -37,7 +37,9 @@ from main.urls import router as main_router
 
 router = routers.DefaultRouter()
 router.registry.extend(main_router.registry)
-router.register(r"users", main_views.UserViewSet)
+router.register(r"users", main_views.UserViewSet , 'users')
+router.register(r"registers", main_views.RegisterViewSet , 'registers')
+router.register(r"logins", main_views.LoginViewSet , 'logins')
 
 urlpatterns = [
     path("admin/", admin.site.urls),
