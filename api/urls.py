@@ -24,6 +24,7 @@ from ping import views as ping_views
 from django.contrib.auth.decorators import login_required
 from django.conf.urls.static import static
 import main.views as main_views
+import main.urls
 
 schema_view = get_schema_view(
     openapi.Info(
@@ -42,4 +43,5 @@ router.register(r"users", main_views.UserViewSet)
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("", include(router.urls)),
+    path("main/", include(main.urls))
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
