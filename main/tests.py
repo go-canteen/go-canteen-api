@@ -3,7 +3,11 @@ from django.urls import reverse
 from main.models import Canteen, CanteenBanner
 from rest_framework.test import APITestCase
 from rest_framework import status
-from views import CanteenViewSet
+from main.serializers import CanteenSerializer
+from main.views import CanteenList
+import io
+import json
+from rest_framework.parsers import JSONParser
 
 class MainTestCase(TestCase):
     def test_root_url_status_200(self):
@@ -55,32 +59,54 @@ class CanteenTestCase(TestCase):
         pass
 
 class CanteenAPITest(APITestCase):
+    def setUp(self) -> None:
+        self.canteen = Canteen.objects.create(
+            name="Canteen 1", address="Jl. Canteen 1", description="Canteen 1"
+        )
+        self.canteen_banner_1 = CanteenBanner.objects.create(
+            canteen=self.canteen, image="https://example.com/image.png"
+        )
+        self.canteen_banner_2 = CanteenBanner.objects.create(
+            canteen=self.canteen, image="https://example.com/image.png"
+        )
+        return super().setUp()
+
     def test_get_canteen_list(self):
-        response = self.client.get('/canteens')
+        url = reverse('canteens')
+        response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.resolver_match.func.view_class, )
+        self.assertEqual(response.resolver_match.func.view_class, CanteenList)
         
     def test_create_canteen(self):
-        Canteen.objects.all().delete()
         url = reverse('canteens')
-        data = {"name" : "Canteen 1", "address" : "Jl. Canteen 1", "description" : "Canteen 1"}
+        data = {"name" : "Canteen 2", "address" : "Jl. Canteen 2", "description" : "Canteen 2"}
         response = self.client.post(url, data, format = "json")
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        self.assertEqual(Canteen.objects.count(), 1)
-        self.assertEqual(Canteen.objects.get().name, "Canteen 1")
+        self.assertEqual(Canteen.objects.count(), 2)
+        self.assertEqual(Canteen.objects.get(name='Canteen 2').address, "Jl. Canteen 2")
 
     def test_get_canteen_detail(self):
-        response = self.client.get('/canteens/1')
+        canteen_id = Canteen.objects.get().id
+        url = reverse('canteen-detail', args=[canteen_id])
+        response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data, {"name" : "Canteen 1", "address" : "Jl. Canteen 1", "description" : "Canteen 1"})
+        self.assertEqual(response.data['id'], str(canteen_id))
+    
+    def test_get_canteen_detail_not_found(self):
+        response = self.client.get('/canteens/abcd')
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_update_canteen_detail(self):
-        url = '/canteens/1'
+        canteen_id = Canteen.objects.get().id
+        url = reverse('canteen-detail', args=[canteen_id])
         data = {"name" : "Canteen 2", "address" : "Jl. Canteen 2", "description" : "Canteen 2"}
         response = self.client.put(url, data, format = "json")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data['name'], "Canteen 2")
 
     def test_delete_canteen_detail(self):
-        response = self.client.delete('/canteens/1')
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        canteen_id = Canteen.objects.get().id
+        url = reverse('canteen-detail', args=[canteen_id])
+        response = self.client.delete(url)
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         self.assertEqual(Canteen.objects.count(), 0)
