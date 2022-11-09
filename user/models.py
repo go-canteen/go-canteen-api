@@ -14,6 +14,8 @@ class Pengguna(AbstractUser):
     first_name = None
     last_name = None
     display_name = models.CharField(max_length=64, blank=True, null=True)
+    is_buyer = models.BooleanField(default=True)
+    is_merchant = models.BooleanField(default=False)
 
     def get_full_name(self):
         return self.display_name.strip()
