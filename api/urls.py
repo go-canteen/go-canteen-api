@@ -24,6 +24,7 @@ from ping import views as ping_views
 from django.contrib.auth.decorators import login_required
 from django.conf.urls.static import static
 import main.views as main_views
+from user.views import PenggunaDetailsView
 
 schema_view = get_schema_view(
     openapi.Info(
@@ -42,5 +43,6 @@ router.registry.extend(main_router.registry)
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("auth/", include("dj_rest_auth.urls")),
+    path("me/", PenggunaDetailsView.as_view(), name="pengguna_details"),
     path("", include(router.urls)),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
