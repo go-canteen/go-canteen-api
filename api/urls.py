@@ -43,6 +43,7 @@ router.registry.extend(main_router.registry)
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("auth/", include("dj_rest_auth.urls")),
+    path("auth/register/", include("dj_rest_auth.registration.urls")),
     path("me/", PenggunaDetailsView.as_view(), name="pengguna_details"),
     path("", include(router.urls)),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
