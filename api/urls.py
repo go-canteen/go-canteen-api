@@ -37,9 +37,10 @@ from main.urls import router as main_router
 
 router = routers.DefaultRouter()
 router.registry.extend(main_router.registry)
-router.register(r"users", main_views.UserViewSet)
+
 
 urlpatterns = [
     path("admin/", admin.site.urls),
+    path("auth/", include("dj_rest_auth.urls")),
     path("", include(router.urls)),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
