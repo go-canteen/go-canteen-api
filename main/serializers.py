@@ -6,7 +6,7 @@ from main.models import Canteen
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     token = serializers.CharField(source="auth_token.key", read_only=True)
-
+    
     class Meta:
         model = User
         fields = (
@@ -18,6 +18,8 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
         read_only_fields = ("id", "token", "groups")
 
 class CanteenSerializer(serializers.ModelSerializer):
+    owner = serializers.ReadOnlyField(source="owner.username")
+
     class Meta:
         model = Canteen
         fields = (
@@ -27,6 +29,7 @@ class CanteenSerializer(serializers.ModelSerializer):
             "description",
             "image",
             "date_joined",
-            "date_updated"
+            "date_updated",
+            "owner"
         )
         read_only_fields = ("id", "date_joined")

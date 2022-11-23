@@ -26,6 +26,7 @@ class UserViewSet(viewsets.ModelViewSet):
     serializer_class = UserSerializer
 
 class CanteenList(APIView):
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
     def get(self, request, format=None):
         canteens = Canteen.objects.all()
@@ -38,9 +39,14 @@ class CanteenList(APIView):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    def perform_create(self, serializer):
+        serializer.save(owner=self.request.user)
 
 
 class CanteenDetail(APIView):
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    
     def get_object(self, pk):
         try:
             return Canteen.objects.get(pk=pk)

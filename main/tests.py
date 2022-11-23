@@ -61,14 +61,8 @@ class CanteenTestCase(TestCase):
 class CanteenAPITest(APITestCase):
     def setUp(self) -> None:
         self.canteen = Canteen.objects.create(
-            name="Canteen 1", address="Jl. Canteen 1", description="Canteen 1"
-        )
-        self.canteen_banner_1 = CanteenBanner.objects.create(
-            canteen=self.canteen, image="https://example.com/image.png"
-        )
-        self.canteen_banner_2 = CanteenBanner.objects.create(
-            canteen=self.canteen, image="https://example.com/image.png"
-        )
+            name="Canteen 1", address="Jl. Canteen 1", description="Canteen 1")
+
         return super().setUp()
 
     def test_get_canteen_list(self):
