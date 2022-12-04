@@ -25,6 +25,7 @@ from django.contrib.auth.decorators import login_required
 from django.conf.urls.static import static
 import main.views as main_views
 from user.views import PenggunaDetailsView
+from history.views import HistoryViewSet
 
 schema_view = get_schema_view(
     openapi.Info(
@@ -46,4 +47,5 @@ urlpatterns = [
     path("auth/register/", include("dj_rest_auth.registration.urls")),
     path("me/", PenggunaDetailsView.as_view(), name="pengguna_details"),
     path("", include(router.urls)),
+    path("history/", HistoryViewSet.as_view({'get': 'list', 'post': 'create'}), name="history"),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

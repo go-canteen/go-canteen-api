@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     "main",
     "user",
     "ping",
+    "history",
     "allauth",
     "allauth.account",
     "allauth.socialaccount",
