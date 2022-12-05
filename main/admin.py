@@ -1,3 +1,5 @@
 from django.contrib import admin
+from main.models import Canteen, CanteenBanner
 
-# Register your models here.
+admin.site.register(Canteen)
+admin.site.register(CanteenBanner)
