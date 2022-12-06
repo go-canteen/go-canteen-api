@@ -14,7 +14,7 @@ class OrderTestCase(TestCase):
         )
         return super().setUp()
 
-def test_canteen_model(self):
+def test_order_model(self):
     self.assertEqual(self.order.name, "User 1")
     self.assertEqual(self.order.merchant, "Merchant 1")
     self.assertEqual(self.order.content, "Nasi Goreng")
