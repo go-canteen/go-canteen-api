@@ -14,3 +14,15 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
             "token",
         )
         read_only_fields = ("id", "token", "groups")
+
+class OrderSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Order
+        fields = (
+            "id",
+            "user",
+            "merchant",
+            "content",
+            "date",
+        )
+        read_only_fields = ("id", "user" ,"merchant" , "content" , "date")

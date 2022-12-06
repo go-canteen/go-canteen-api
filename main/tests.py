@@ -1,6 +1,6 @@
 from django.test import  TestCase, tag
 from django.urls import reverse
-from models import Order
+from main.models import Order
 
 class MainTestCase(TestCase):
     def test_root_url_status_200(self):
