@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User, Group
 from rest_framework import serializers
-
+from main.models import Order
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     token = serializers.CharField(source="auth_token.key", read_only=True)

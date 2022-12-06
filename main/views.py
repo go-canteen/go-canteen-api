@@ -4,6 +4,8 @@ from django.contrib.auth.models import User
 from rest_framework import viewsets
 from main.serializers import UserSerializer
 from rest_framework import authentication, permissions
+from rest_framework.views import APIView
+from rest_framework import status
 import logging
 
 logger = logging.getLogger(__name__)
@@ -22,12 +24,12 @@ class UserViewSet(viewsets.ModelViewSet):
 class OrderList(APIView):
     
     def get(self, request, format=None):
-        order = Order.objects.all()
-        serializer = CanteenSerializer(canteens, many=True)
+        orders = Order.objects.all()
+        serializer = OrderSerializer(orders, many=True)
         return Response({"Order": serializer.data})
 
     def post(self, request, format=None):
-        serializer = CanteenSerializer(data=request.data)
+        serializer = OrderSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -43,12 +45,12 @@ class OrderDetail(APIView):
 
     def get(self, request, pk, format=None):
         order = self.get_object(pk)
-        serializer = CanteenSerializer(order)
+        serializer = OrderSerializer(order)
         return Response(serializer.data)
     
     def put(self, request, pk, format=None):
         order = self.get_object(pk)
-        serializer = CanteenSerializer(order, data=request.data)
+        serializer = OrderSerializer(order, data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
